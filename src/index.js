@@ -1,4 +1,4 @@
-import { StrictMode, useState } from "react";
+import React, { StrictMode, useState } from "react";
 import ReactDOM from "react-dom";
 
 import "./styles.css";
@@ -6,18 +6,54 @@ import "./styles.css";
 function App() {
   //useState = 초기에 state를 InitialState를 세팅 할 수 있는 옵션
   const [item, setItem] = useState(1);
+  const incrementItem = () => setItem(item + 1);
+  const decrementItem = () => setItem(item - 1);
   return (
     <div className="App">
-      <h1>Hello CodeSandbox</h1>
+      <h1>Hello {item}</h1>
       <h2>Start editing to see some magic happen!</h2>
+      <button onClick={incrementItem}>Increment</button>
+      <button onClick={decrementItem}>Decrement</button>
     </div>
   );
+}
+
+//Hook를 사용하지 않을때
+class AppUgly extends React.Component {
+  state = {
+    item: 1
+  };
+  render() {
+    const { item } = this.state;
+    return (
+      <div className="App">
+        <h1>Hello {item}</h1>
+        <h2>Start editing to see some magic happen!</h2>
+        <button onClick={this.incrementItem}>Increment</button>
+        <button onClick={this.decrementItem}>Decrement</button>
+      </div>
+    );
+  }
+  incrementItem = () => {
+    this.setState((state) => {
+      return {
+        item: state.item + 1
+      };
+    });
+  };
+  decrementItem = () => {
+    this.setState((state) => {
+      return {
+        item: state.item - 1
+      };
+    });
+  };
 }
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
   <StrictMode>
-    <App />
+    <AppUgly />
   </StrictMode>,
   rootElement
 );
