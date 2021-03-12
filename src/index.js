@@ -1,40 +1,22 @@
-import React, { StrictMode, useState } from "react";
+import React, { StrictMode, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
 import "./styles.css";
 
-//TODO:
-const content = [
-  {
-    tab: "Scetion 1",
-    content: "I'm the content of the Section 1"
-  },
-  {
-    tab: "Scetion 2",
-    content: "I'm the content of the Section 2"
-  }
-];
-
-const useTabs = (initialTab, allTabs) => {
-  if (!allTabs || !Array.isArray(allTabs)) {
-    return;
-  }
-  const [currentIndex, setCurrentIndex] = useState(initialTab);
-  return {
-    currentItem: allTabs[currentIndex],
-    changeItem: setCurrentIndex
-  };
-};
-
 const App = () => {
-  //useTabs의 기본값 0
-  const { currentItem, changeItem } = useTabs(0, content);
+  const sayHello = () => console.log("Hello");
+  //useEffect = componentDidmoud의 역할을 한다.
+  //새로고침을 하면 sayHello를 실행한다.
+  //componentDidUpdate의 역할도 하기 때문에 클릭하면 sayHello를 실행한다.
+  const [number, setNumber] = useState(0);
+  const [aNumber, setAnumber] = useState(0);
+  //첫번째는 function, 두번째는 조건
+  useEffect(sayHello, []);
   return (
     <div className="App">
-      {content.map((section, index) => (
-        <button onClick={() => changeItem(index)}>{section.tab}</button>
-      ))}
-      <div>{currentItem.content}</div>
+      <div>Hi</div>
+      <button onClick={() => setNumber(number + 1)}>{number}</button>
+      <button onClick={() => setAnumber(aNumber + 1)}>{aNumber}</button>
     </div>
   );
 };
