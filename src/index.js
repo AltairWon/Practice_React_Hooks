@@ -1,25 +1,34 @@
-import React, { StrictMode, useEffect, useState } from "react";
+import React, { StrictMode, useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 
 import "./styles.css";
 
-//useTItle = title에 대한 update를 사용할 수 있다.
-const useTitle = (initialTitle) => {
-  const [title, setTitle] = useState(initialTitle);
-  const updateTitle = () => {
-    const htmlTitle = document.querySelector("title");
-    htmlTitle.innerText = title;
-  };
-  useEffect(updateTitle, [title]);
-  return setTitle;
+//click event에 대한 functions을 발생하지 않도록 만들어준다.
+const useClick = (onClick) => {
+  if (typeof onClick !== "function") {
+    return;
+  }
+  const element = useRef();
+  useEffect(() => {
+    if (element.current) {
+      element.current.addEventListener("click", onClick);
+    }
+    return () => {
+      if (element.current) {
+        element.current.removeEventListener("click", onClick);
+      }
+    };
+  }, []);
+  return element;
 };
 
 const App = () => {
-  const titleUpdater = useTitle("Loading...");
-  setTimeout(() => titleUpdater("Home"), 5000);
+  //click하면 say Hello가 나오도록 하는 방법
+  const sayHello = () => console.log("Say Hello");
+  const title = useClick(sayHello);
   return (
     <div className="App">
-      <div>Hi</div>
+      <div ref={title}>Hi</div>
     </div>
   );
 };
