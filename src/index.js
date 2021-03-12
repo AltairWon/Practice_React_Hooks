@@ -3,34 +3,38 @@ import ReactDOM from "react-dom";
 
 import "./styles.css";
 
-//useInput: 기본적으로 input을 업데이트한다.
-//이벤트를 분리된 파일, 다른 entity에 연결해서 처리 할 수 있다.
-const useInput = (initialValue, validator) => {
-  const [value, setValue] = useState(initialValue);
-  const onChange = (event) => {
-    const {
-      target: { value }
-    } = event;
-    //willUpdat = true: 항상 업데이트가 될 것이다.
-    let willUpdate = true;
-    if (typeof validator === "function") {
-      willUpdate = validator(value);
-    }
-    if (willUpdate) {
-      setValue(value);
-    }
+//TODO:
+const content = [
+  {
+    tab: "Scetion 1",
+    content: "I'm the content of the Section 1"
+  },
+  {
+    tab: "Scetion 2",
+    content: "I'm the content of the Section 2"
+  }
+];
+
+const useTabs = (initialTab, allTabs) => {
+  if (!allTabs || !Array.isArray(allTabs)) {
+    return;
+  }
+  const [currentIndex, setCurrentIndex] = useState(initialTab);
+  return {
+    currentItem: allTabs[currentIndex],
+    changeItem: setCurrentIndex
   };
-  return { value, onChange };
 };
 
-//{...name}으로 간단하게 처리를 할 수 있다.
 const App = () => {
-  const maxLen = (value) => !value.includes("@");
-  const name = useInput("Mr.", maxLen);
+  //useTabs의 기본값 0
+  const { currentItem, changeItem } = useTabs(0, content);
   return (
     <div className="App">
-      <h1>Hello</h1>
-      <input placeholder="Name" {...name} />
+      {content.map((section, index) => (
+        <button onClick={() => changeItem(index)}>{section.tab}</button>
+      ))}
+      <div>{currentItem.content}</div>
     </div>
   );
 };
