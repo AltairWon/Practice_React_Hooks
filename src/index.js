@@ -3,32 +3,24 @@ import ReactDOM from "react-dom";
 
 import "./styles.css";
 
-//click event에 대한 functions을 발생하지 않도록 만들어준다.
-const useClick = (onClick) => {
-  if (typeof onClick !== "function") {
+//useConfirm: 사용자가 무언가를 하기전에 확인 하는 것.
+const useConfirm = (message = "", callback) => {
+  //이if문은 스킵을 해도 좋지만 나중에 함수형 프로그래밍을 이해하는데 도움이 될 것이다.
+  if (typeof callback !== "function") {
     return;
   }
-  const element = useRef();
-  useEffect(() => {
-    if (element.current) {
-      element.current.addEventListener("click", onClick);
+  const confirmAction = () => {
+    if (confirm(message)) {
+      callback;
     }
-    return () => {
-      if (element.current) {
-        element.current.removeEventListener("click", onClick);
-      }
-    };
-  }, []);
-  return element;
+  };
+  return confirmAction;
 };
 
 const App = () => {
-  //click하면 say Hello가 나오도록 하는 방법
-  const sayHello = () => console.log("Say Hello");
-  const title = useClick(sayHello);
   return (
     <div className="App">
-      <div ref={title}>Hi</div>
+      <div>Hi</div>
     </div>
   );
 };
